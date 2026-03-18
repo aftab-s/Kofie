@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
-
-const BeanImage = lazy(() => import('./components/BeanImage'));
 
 const roastCurve = [18, 32, 42, 55, 64, 70, 82, 78, 88];
 const releaseRows = [
@@ -65,8 +63,6 @@ export default function App() {
     damping: 22,
     mass: 0.45,
   });
-  const heroY = useTransform(smoothProgress, [0, 1], ['0%', '20%']);
-  const heroRotate = useTransform(smoothProgress, [0, 1], ['0deg', '-5deg']);
 
   useEffect(() => {
     const updateMouse = (e) => {
@@ -102,9 +98,7 @@ export default function App() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (!email.trim()) {
-      return;
-    }
+    if (!email.trim()) return;
     setSubscribed(true);
     setEmail('');
     window.setTimeout(() => setSubscribed(false), 2200);
@@ -120,126 +114,140 @@ export default function App() {
         exit={{ opacity: 0, filter: 'blur(6px)' }}
         transition={{ duration: 0.32, ease: 'easeOut' }}
       >
-        <motion.div className="progress-rail" style={{ scaleX: smoothProgress }} />
         <DotGrid x={mouse.x} y={mouse.y} />
         <div className="ambient ambient-a" aria-hidden="true" />
         <div className="ambient ambient-b" aria-hidden="true" />
 
-        <header className="top-nav glass">
-          <a href="#top" className="brand-mark" onClick={() => setMobileNavOpen(false)}>
-            KOFIE//EXTRACTION LAB
-          </a>
-          <button
-            type="button"
-            className="menu-toggle"
-            aria-label="Toggle navigation"
-            aria-expanded={mobileNavOpen}
-            aria-controls="site-nav-panel"
-            onClick={() => setMobileNavOpen((prev) => !prev)}
-          >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-          </button>
-          <div id="site-nav-panel" className={`nav-panel ${mobileNavOpen ? 'is-open' : ''}`}>
-            <nav className="nav-links" aria-label="Section links">
-              <a href="#architecture" onClick={() => setMobileNavOpen(false)}>
-                Architecture
-              </a>
-              <a href="#releases" onClick={() => setMobileNavOpen(false)}>
-                Releases
-              </a>
-              <a href="#access" onClick={() => setMobileNavOpen(false)}>
-                Access
-              </a>
-            </nav>
-            <ThemeToggle
-              theme={theme}
-              onToggle={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
-            />
+        <header className="top-nav">
+          <div className="nav-container">
+            <a href="#top" className="brand-mark" onClick={() => setMobileNavOpen(false)}>
+              KOFIE//ROASTERY
+            </a>
+            <button
+              type="button"
+              className="menu-toggle"
+              aria-label="Toggle navigation"
+              aria-expanded={mobileNavOpen}
+              aria-controls="site-nav-panel"
+              onClick={() => setMobileNavOpen((prev) => !prev)}
+            >
+              <span aria-hidden="true" />
+              <span aria-hidden="true" />
+            </button>
+            <div id="site-nav-panel" className={`nav-panel ${mobileNavOpen ? 'is-open' : ''}`}>
+              <nav className="nav-links" aria-label="Section links">
+                <a href="#roastery" onClick={() => setMobileNavOpen(false)}>
+                  The Roastery
+                </a>
+                <a href="#collections" onClick={() => setMobileNavOpen(false)}>
+                  Collections
+                </a>
+                <a href="#experience" onClick={() => setMobileNavOpen(false)}>
+                  Experience
+                </a>
+              </nav>
+              <ThemeToggle
+                theme={theme}
+                onToggle={() => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
+              />
+            </div>
           </div>
         </header>
 
         <main>
-          <section className="hero section" id="top">
-            <motion.div
-              className="hero-copy"
-              initial={{ y: 24, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <p className="chip glass">Hardware-Grade Coffee Platform</p>
-              <h1 className="dot-heading">KOFIE</h1>
-              <p className="subtitle">Extraction 01. The Purest Signal.</p>
-              <p className="hero-lead">
-                We roast in narrow tolerance windows and publish every curve. No noise. No romance.
-                Only repeatable flavor architecture.
-              </p>
-            </motion.div>
-
-            <motion.div className="hero-visual glass" style={{ y: heroY, rotate: heroRotate }}>
-              <Suspense fallback={<div className="bean-skeleton" aria-hidden="true" />}>
-                <BeanImage />
-              </Suspense>
-              <div className="bean-overlay" aria-hidden="true" />
-            </motion.div>
-
-            <div className="hero-stats">
-              <article className="glass stat-card">
-                <p>Signal Stability</p>
-                <strong>99.2%</strong>
-              </article>
-              <article className="glass stat-card">
-                <p>Roast Delta</p>
-                <strong>+/- 0.3C</strong>
-              </article>
-              <article className="glass stat-card">
-                <p>Median Rest Time</p>
-                <strong>9 Days</strong>
-              </article>
+          <section className="hero-v2" id="top">
+            <div className="hero-v2-grid">
+              <motion.div 
+                className="hero-v2-text"
+                initial={{ x: -40, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <div className="hero-tag">Sourcing // Roasting // Brewing</div>
+                <h1 className="hero-v2-title">THOUGHTFUL<br />COFFEE</h1>
+                <p className="hero-v2-lead">
+                  We believe in the quiet beauty of a perfect roast. From the high-altitude farms of Kiambu to your morning ritual, we ensure every bean tells its own unique story.
+                </p>
+                <div className="hero-v2-actions">
+                  <a href="#collections" className="btn-sharp primary">Explore Collections</a>
+                  <a href="#roastery" className="btn-sharp">Our Story</a>
+                </div>
+              </motion.div>
+              
+              <motion.div 
+                className="hero-v2-image-wrap"
+                initial={{ scale: 1.05, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 1.2, delay: 0.2 }}
+              >
+                <img src="/beans.png" alt="Roasted Coffee Beans" className="hero-v2-image" />
+                <div className="hero-v2-image-overlay" />
+                <div className="hero-v2-image-info">
+                  <span>Batch: K-082</span>
+                  <span>Origin: Kiambu Highland</span>
+                </div>
+              </motion.div>
+            </div>
+            
+            <div className="hero-v2-footer">
+              <div className="scroll-indicator">
+                <span className="line" />
+                <span className="text">Scroll to explore</span>
+              </div>
+              <div className="hero-v2-stats">
+                <div className="stat">
+                  <strong>1820m</strong>
+                  <span>Average Elevation</span>
+                </div>
+                <div className="stat">
+                  <strong>88+</strong>
+                  <span>SCA Cup Score</span>
+                </div>
+              </div>
             </div>
           </section>
 
-          <section className="section" id="architecture">
-            <h2 className="section-title">Component Breakdown</h2>
+          <section className="section" id="roastery">
+            <h2 className="section-title">The Roastery Approach</h2>
             <div className="bento-grid">
               <article className="glass tile">
-                <p className="tile-label">The Source</p>
-                <p className="dot-copy">-01.2823 / 36.8155</p>
-                <p className="muted">Kiambu Highlands / Elev. 1820m / Lot 7-B</p>
+                <p className="tile-label">Direct Sourcing</p>
+                <p className="dot-copy">ORIGIN // 01.2823</p>
+                <p className="muted">Working with farmers who prioritize quality and sustainability above all else.</p>
               </article>
 
               <article className="glass tile">
-                <p className="tile-label">The Roast</p>
+                <p className="tile-label">Roast Profile</p>
                 <RoastCurve />
               </article>
 
               <article className="glass tile notes-tile">
-                <p className="tile-label">The Notes</p>
-                <p className="notes">CITRUS. CACAO. AIR.</p>
+                <p className="tile-label">Flavor Profile</p>
+                <p className="notes">JASMINE. PEACH. HONEY.</p>
               </article>
 
               <article className="glass tile manifest-tile">
-                <p className="tile-label">Process Manifest</p>
+                <p className="tile-label">Quality Metrics</p>
                 <ul className="manifest-list">
-                  <li>Batch size: 6.0 kg</li>
-                  <li>Development: 16.2%</li>
-                  <li>Drop temp: 203.6C</li>
-                  <li>Agtron: 71</li>
+                  <li>Roast Level: Light-Medium</li>
+                  <li>Density: High</li>
+                  <li>Moisture: 10.5%</li>
+                  <li>Water Activity: 0.58aw</li>
                 </ul>
               </article>
             </div>
           </section>
 
-          <section className="section releases" id="releases">
-            <h2 className="section-title">Current Releases</h2>
+          <section className="section releases" id="collections">
+            <h2 className="section-title">Current Collections</h2>
             <div className="release-shell glass">
               <div className="release-head">
-                <span>Batch ID</span>
+                <span>Lot ID</span>
                 <span>Name</span>
                 <span>Process</span>
-                <span>Score</span>
+                <span>Tasting Notes</span>
               </div>
-              <div className="release-body" role="list" aria-label="Release list">
+              <div className="release-body" role="list" aria-label="Collection list">
                 {releaseRows.map((row, i) => (
                   <motion.article
                     key={row.id}
@@ -250,42 +258,48 @@ export default function App() {
                     viewport={{ once: true, amount: 0.7 }}
                     transition={{ duration: 0.45, delay: i * 0.08 }}
                   >
-                    <span data-label="Batch ID">{row.id}</span>
+                    <span data-label="Lot ID">{row.id}</span>
                     <span data-label="Name">{row.name}</span>
                     <span data-label="Process">{row.process}</span>
-                    <span data-label="Score">{row.score}</span>
+                    <span data-label="Notes">Floral, Bright, Syrupy</span>
                   </motion.article>
                 ))}
               </div>
             </div>
           </section>
 
-          <section className="section hardware-section">
-            <h2 className="section-title">Hardware Gallery</h2>
-            <div className="gallery-row" role="list" aria-label="Coffee packaging gallery">
-              {['K-01', 'K-02', 'K-03', 'K-04'].map((pack, i) => (
+          <section className="section experience-gallery" id="experience">
+            <h2 className="section-title">Coffee Experience</h2>
+            <div className="gallery-row-v2" role="list" aria-label="Coffee experience gallery">
+              {[
+                { title: 'The Roast', desc: 'Precision heat application.', img: '/vibe.png' },
+                { title: 'The Brew', desc: 'Optimal extraction methods.', img: '/hero.png' },
+                { title: 'The Bean', desc: 'Sourced from volcanic soil.', img: '/beans.png' },
+              ].map((item, i) => (
                 <motion.article
-                  key={pack}
-                  className="pack-card glass"
+                  key={item.title}
+                  className="exp-card glass"
                   role="listitem"
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.25 }}
-                  transition={{ duration: 0.55, delay: i * 0.08 }}
-                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.55, delay: i * 0.1 }}
+                  whileHover={{ y: -10 }}
                 >
-                  <div className="pack-inner">
-                    <span>{pack}</span>
-                    <span>Transparent Bag</span>
-                    <span>Whole Bean / 250g</span>
+                  <div className="exp-image-wrap">
+                    <img src={item.img} alt={item.title} className="exp-image" />
+                  </div>
+                  <div className="exp-content">
+                    <h3>{item.title}</h3>
+                    <p>{item.desc}</p>
                   </div>
                 </motion.article>
               ))}
             </div>
           </section>
 
-          <section className="section access-section" id="access">
-            <h2 className="section-title">Terminal Access</h2>
+          <section className="section subscribe-section" id="access">
+            <h2 className="section-title">Stay Updated</h2>
             <div className="access-grid">
               <form className="terminal glass" onSubmit={onSubmit}>
                 <label htmlFor="email" className="sr-only">
@@ -297,13 +311,12 @@ export default function App() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter Email to Subscribe..."
+                  placeholder="Join our mailing list for fresh roasts..."
                   autoComplete="email"
                 />
                 <span className="cursor" aria-hidden="true" />
-                <button type="submit" className="pill-button submit-pill">
-                  <span className="dot-indicator" aria-hidden="true" />
-                  Sync
+                <button type="submit" className="btn-sharp submit-btn">
+                  Subscribe
                 </button>
               </form>
 
@@ -315,7 +328,7 @@ export default function App() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                   >
-                    Signal accepted. You are in queue.
+                    Welcome to the Roastery. Check your inbox soon.
                   </motion.p>
                 )}
               </AnimatePresence>
@@ -323,25 +336,53 @@ export default function App() {
           </section>
         </main>
 
-        <footer className="footer glass">
-          <div className="footer-item">
-            <p className="footer-label">Time</p>
-            <strong>
-              {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-            </strong>
+        <footer className="footer-v2 glass">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <h2 className="footer-logo">KOFIE</h2>
+              <p className="footer-tagline">Thoughtful Roasting since 2026</p>
+              <div className="footer-status">
+                <span className="dot-indicator" />
+                Roastery Active // {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </div>
+            </div>
+            
+            <div className="footer-nav-group">
+              <p className="footer-heading">Navigate</p>
+              <ul className="footer-links">
+                <li><a href="#top">Top</a></li>
+                <li><a href="#roastery">Process</a></li>
+                <li><a href="#collections">Shop</a></li>
+                <li><a href="#experience">Story</a></li>
+              </ul>
+            </div>
+
+            <div className="footer-nav-group">
+              <p className="footer-heading">Connect</p>
+              <ul className="footer-links">
+                <li><a href="#">Instagram</a></li>
+                <li><a href="#">Newsletter</a></li>
+                <li><a href="#">Contact</a></li>
+              </ul>
+            </div>
+
+            <div className="footer-nav-group">
+              <p className="footer-heading">Location</p>
+              <p className="footer-text">
+                Central Roastery<br />
+                Artisan Quarter<br />
+                City Core
+              </p>
+            </div>
           </div>
-          <div className="footer-item">
-            <p className="footer-label">Location</p>
-            <strong>Roastery Core</strong>
+          
+          <div className="footer-bottom">
+            <p className="copyright">© 2026 KOFIE. ALL RIGHTS RESERVED.</p>
+            <div className="footer-legal">
+              <a href="#">Privacy</a>
+              <a href="#">Terms</a>
+            </div>
           </div>
-          <a className="footer-item footer-link" href="#top">
-            <p className="footer-label">System</p>
-            <strong>Return to Top</strong>
-          </a>
-          <a className="footer-item footer-link" href="#" aria-label="Privacy policy">
-            <p className="footer-label">Policy</p>
-            <strong>Privacy Policy</strong>
-          </a>
         </footer>
       </motion.div>
     </AnimatePresence>
